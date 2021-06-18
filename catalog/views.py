@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 
@@ -59,9 +59,10 @@ def detail_book(request, pk):
         return render(request, "404.html", {"errors": ex})
 
 
-class AuthorListView(LoginRequiredMixin, generic.ListView):
+class AuthorListView(generic.ListView):
     model = Author
     template_name = "authors/index.html"
+    paginate_by = 10
 
 
 class AuthorDetailView(generic.DetailView):
@@ -73,7 +74,7 @@ class AuthorDetailView(generic.DetailView):
 class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
     model = BookInstance
     template_name = "bookinstances/list_borrowed_user.html"
-    paginate_by = 2
+    paginate_by = 10
 
     def get_queryset(self):
         return (
@@ -86,7 +87,7 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
 class LoanedBookListView(LoginRequiredMixin, generic.ListView):
     model = BookInstance
     template_name = "bookinstances/list_borrowed.html"
-    paginate_by = 2
+    paginate_by = 10
     queryset = BookInstance.objects.filter(status__exact="o").order_by("due_back")
 
 
@@ -113,11 +114,12 @@ def renew_book_librarian(request, pk):
     return render(request, "bookinstances/book_renew_librarian.html", context)
 
 
-class AuthorCreate(CreateView):
+class AuthorCreate(PermissionRequiredMixin, CreateView):
     model = Author
     fields = ["first_name", "last_name", "date_of_birth", "date_of_death"]
     initial = {"date_of_death": "11/06/2020"}
     template_name = "authors/new.html"
+    permission_required = "catalog.can_mark_returned"
 
 
 class AuthorUpdate(UpdateView):
