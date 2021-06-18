@@ -114,7 +114,7 @@ def renew_book_librarian(request, pk):
     return render(request, "bookinstances/book_renew_librarian.html", context)
 
 
-class AuthorCreate(PermissionRequiredMixin, CreateView):
+class AuthorCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Author
     fields = ["first_name", "last_name", "date_of_birth", "date_of_death"]
     initial = {"date_of_death": "11/06/2020"}

@@ -355,3 +355,16 @@ class AuthorCreateViewTest(TestCase):
         self.assertEqual(
             response.context["form"].initial["date_of_death"], default_date
         )
+
+    def test_redirect_when_create_success(self):
+        login = self.client.login(username="user2", password="1234@1234")
+        params = {
+            "first_name": "Author 1",
+            "last_name": "A",
+            "date_of_birth": "10/10/1888",
+        }
+        response = self.client.post(reverse("author-create"), params)
+        # print("------ ", response)
+
+        # self.assertEqual(response.status_code, 200)
+        # self.assertRedirects(response, reverse(''))
