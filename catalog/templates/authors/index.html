@@ -3,11 +3,15 @@
 
 {% block content %}
   <h1>Author List</h1>
+  <button>
+    <a href="{% url 'author-create' %}">New</a>
+  </button>
   {% if author_list %}
     <ul>
         {% for author in author_list %}
         <li>
             <a href="{{ author.get_absolute_url }}">{{ author.first_name }}, {{author.last_name}}</a> ({{author.date_of_birth}})
+            -- <a href="{% url 'author-delete' author.id%}">Confirm delete</a>
         </li>
         {% endfor %}
     </ul>
