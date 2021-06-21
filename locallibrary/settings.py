@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 
+import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -116,7 +118,7 @@ LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "Europe/London"
 
-USE_I18N = True
+USE_I18N = False
 
 USE_L10N = True
 
@@ -134,8 +136,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = "/"
-
-import dj_database_url
 
 # Config Db to deploy Heroku
 db_from_env = dj_database_url.config(conn_max_age=500)
